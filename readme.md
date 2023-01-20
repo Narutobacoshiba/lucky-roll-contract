@@ -139,7 +139,7 @@ example
         --gas=auto \
         --gas-adjustment 1.3 \
         --node=https://rpc.euphoria.aura.network:443/ \
-        --amount 300ueaura -y
+        --amount 300ueaura
 ```
 
 * `Query`

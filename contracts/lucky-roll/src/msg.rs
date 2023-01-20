@@ -49,8 +49,10 @@ pub enum QueryMsg {
     GetAttendees{},
 }
 
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct AttendeeQuery {
+    pub number: usize,
     pub attendees: Vec<Attendee>
 }
 

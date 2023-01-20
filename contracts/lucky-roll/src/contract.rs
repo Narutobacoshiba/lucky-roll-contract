@@ -23,7 +23,7 @@ use crate::state::{
     PRIZES, OWNER, END_ROUND
 };
 use crate::utils::{
-    convert_datetime_string, generate_true_randomness
+    convert_datetime_string, generate_lucky_number
 };
 
 // version info for migration info
@@ -141,7 +141,7 @@ fn execute_reset (
     END_ROUND.save(_deps.storage, &false)?;
 
 
-    return Ok(Response::new().add_attribute("action","set configs")
+    return Ok(Response::new().add_attribute("action","reset")
                             .add_attribute("owner", _info.sender));
 }
 
@@ -204,7 +204,7 @@ fn execute_set_whitelist(
         })?;
     }
 
-    return Ok(Response::new().add_attribute("action","add whitelist"));
+    return Ok(Response::new().add_attribute("action","set whitelist"));
 }
 
 
@@ -242,12 +242,7 @@ fn execute_roll(
     }
 
     for v in vecs.iter() {
-        let randomness = generate_true_randomness(
-            v.1.address.clone().to_string(),
-            v.1.lucky_number.clone(),
-        );
-
-        prizes = shuffle(randomness, prizes);
+        prizes = shuffle(v.1.lucky_number, prizes);
         let prize = prizes.pop();
 
         distribute_prizes.push(DistributePrize{
@@ -293,7 +288,7 @@ fn execute_lucky_number(
 
     ATTENDEE_LIST.save(_deps.storage, _info.sender.clone(),&Attendee{
         address: _info.sender.clone(),
-        lucky_number: "".to_string()
+        lucky_number: [0u8;32]
     })?;
 
     WHITELIST.save(_deps.storage, _info.sender.clone(), &Status{
@@ -310,7 +305,7 @@ fn execute_lucky_number(
 
     return Ok(Response::new()
         .add_message(msg)
-        .add_attribute("action","pick prize"));
+        .add_attribute("action","lucky number"));
 }
 
 pub fn execute_receive(
@@ -357,8 +352,8 @@ pub fn execute_receive(
     }
 
     ATTENDEE_LIST.save(_deps.storage, address.clone(), &Attendee{
-        address: address,
-        lucky_number: hex::encode(randomness),
+        address: address.clone(),
+        lucky_number: generate_lucky_number(address.to_string(), randomness),
     })?;
 
     return Ok(Response::new().add_attribute("action","get lucky number"));
@@ -397,5 +392,8 @@ pub fn query_get_attendees(deps: Deps) -> StdResult<AttendeeQuery> {
         attendees.push(v.1.clone());
     }
 
-    return Ok(AttendeeQuery{attendees: attendees});
+    return Ok(AttendeeQuery{
+        number: vecs.len(),
+        attendees: attendees}
+    );
 }

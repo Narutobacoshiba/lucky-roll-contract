@@ -15,7 +15,7 @@ pub const CONFIGS: Item<Configs> = Item::new("configs");
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Attendee {
     pub address: Addr,
-    pub lucky_number: String,
+    pub lucky_number: [u8;32],
 }
 pub const ATTENDEE_LIST: Map<Addr, Attendee> = Map::new("attendee list");
 

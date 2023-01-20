@@ -19,8 +19,8 @@ pub fn convert_datetime_string(data: String) -> Timestamp {
     return Timestamp::from_nanos(date_time.timestamp_nanos() as u64);
 }
 
-pub fn generate_true_randomness(address: String, randomness: String) -> [u8;32] {
-    let seed = address + &randomness;
+pub fn generate_lucky_number(address: String, randomness: [u8;32]) -> [u8;32] {
+    let seed = address + &hex::encode(randomness);
     return sha256_hash(seed.as_bytes());
 }
 
