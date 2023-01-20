@@ -1,0 +1,13 @@
+{
+  "euphoria": {
+    "lucky-roll": {
+      "code_id": 480,
+      "addresses": {
+        "_": "aura1s23l84vgqx2kgwhjxya7g2j5afllnkkmtnn6mmap35sv4jlgdplssrsc0g"
+      },
+      "proposal": {
+        "store_code": null
+      }
+    }
+  }
+}
