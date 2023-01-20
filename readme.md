@@ -8,7 +8,7 @@
 * Owner can execute `reset` command to reset game with same parameters as `Instantiate`
 * Owner execute `set_white_list` command to specify who can allowed to playing game
 * Onwer execute `set_prizes` command to set prizes
-* Players execute `lucky_number` command to receive owned lucky number \\ maybe will require validator to send with some new year messages to our team
+* Players execute `lucky_number` command to receive owned lucky number ( maybe will require attendee to send with some new year messages to dev team)
 * In the end, owner execute `roll` command to distribute prizes for players
 
 
@@ -24,8 +24,8 @@
         time_end: String,
     }
 ```
-    - only allow onwer to execute
-    - will reset game
+- only allow onwer to execute
+- will reset game
 
 * `set_white_list`
 ```Rust
@@ -33,9 +33,9 @@
         attendees: Vec<String>
     }
 ```
-    - only allow owner to execute
-    - only executed in round
-    - specific players by wallet address
+- only allow owner to execute
+- only executed in round
+- specific players by wallet address
 
 * `set_prizes`
 ```Rust
@@ -43,9 +43,9 @@
         prizes: Vec<String>
     }
 ```
-    - only allow owner to execute
-    - only executed in round
-    - this will make a message to Nois Proxy and will be shuffled randomly using NoisCallback (after execute `set_prizes` command, need to wait 1-2' for **NoisCallback** then you can execute another command like `roll`)
+- only allow owner to execute
+- only executed in round
+- this will make a message to Nois Proxy and will be shuffled randomly using NoisCallback (after execute `set_prizes` command, need to wait 1-2' for **NoisCallback** then you can execute another command like `roll`)
 
 * `roll`
 ```Rust
@@ -53,17 +53,22 @@
 
     }
 ```
-    - only allow owner to execute
-    - only executed in round
-    - only executed before `time_end`
-    - this command will distribute prizes for all attendees base on prizes list and attendee's lucky number
-    - if success, it will end a round
+- only allow owner to execute
+- only executed in round
+- only executed before `time_end`
+- this command will distribute prizes for all attendees base on prizes list and attendee's lucky number
+- if success, it will end a round
 
 * `lucky_number`
-    - only allow WhiteList member to execute
-    - only executed before `time_start` and after `time_end`
-    - only executed in round
-    - make a message to Nois Proxy and receive NoisCallback as lucky number
+```Rust
+    LuckyNumber {
+
+    }
+```
+- only allow WhiteList member to execute
+- only executed before `time_start` and after `time_end`
+- only executed in round
+- make a message to Nois Proxy and receive NoisCallback as lucky number
 
 # Query
 * `get_prizes`
