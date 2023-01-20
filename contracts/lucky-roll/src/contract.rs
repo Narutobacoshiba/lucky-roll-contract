@@ -20,7 +20,7 @@ use crate::state::{
     Attendee, ATTENDEE_LIST,
     Status, WHITELIST,
     DistributePrize, DISTRIBUTE_PRIZES,
-    PRIZES, OWNER, END_ROUND
+    PRIZES, Prizes, OWNER, END_ROUND
 };
 use crate::utils::{
     convert_datetime_string, generate_lucky_number
@@ -29,6 +29,7 @@ use crate::utils::{
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:lucky-roll";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
+
 
 /// Handling contract instantiation
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -53,7 +54,11 @@ pub fn instantiate(
 
     OWNER.save(deps.storage, &info.sender.clone())?;
 
-    PRIZES.save(deps.storage, &vec![])?;
+    PRIZES.save(deps.storage, &Prizes{
+        shuffle: false,
+        prizes: vec![]
+    })?;
+
     DISTRIBUTE_PRIZES.save(deps.storage, &vec![])?;
 
     END_ROUND.save(deps.storage, &false)?;
@@ -135,7 +140,11 @@ fn execute_reset (
 
     ATTENDEE_LIST.clear(_deps.storage);
     
-    PRIZES.save(_deps.storage, &vec![])?;
+    PRIZES.save(_deps.storage, &Prizes{
+        shuffle: false,
+        prizes: vec![]
+    })?;
+
     DISTRIBUTE_PRIZES.save(_deps.storage, &vec![])?;
 
     END_ROUND.save(_deps.storage, &false)?;
@@ -161,7 +170,10 @@ fn execute_set_prizes(
         return Err(ContractError::RoundEnd{});
     }
 
-    PRIZES.save(_deps.storage, &prizes)?;
+    PRIZES.save(_deps.storage, &Prizes {
+        shuffle: false,
+        prizes: prizes
+    })?;
 
     let msg = WasmMsg::Execute {
         contract_addr: configs.nois_proxy.into(),
@@ -230,8 +242,16 @@ fn execute_roll(
         return Err(ContractError::CustomError{val:"Game not end yet!".to_string()});
     }
 
-    let mut distribute_prizes: Vec<DistributePrize> = Vec::new();
-    let mut prizes = PRIZES.load(_deps.storage)?; 
+    let prizes = PRIZES.load(_deps.storage)?;
+
+    if !prizes.shuffle {
+        return Err(ContractError::CustomError{val:"Prizes are not shuffled!".to_string()});
+    }
+    
+    let mut prizes = prizes.prizes;
+    let mut distribute_prizes: Vec<DistributePrize> = Vec::new(); 
+
+
     let vecs: StdResult<Vec<_>> = ATTENDEE_LIST
             .range_raw(_deps.storage, None, None, Order::Ascending)
             .collect();
@@ -330,11 +350,14 @@ pub fn execute_receive(
     let job_id = callback.job_id;
 
     if job_id.eq(&String::from("set prizes")) {
-        let mut prizes = PRIZES.load(_deps.storage)?;
+        let mut prizes = PRIZES.load(_deps.storage)?.prizes;
 
         prizes = shuffle(randomness, prizes);
 
-        PRIZES.save(_deps.storage, &prizes)?;
+        PRIZES.save(_deps.storage, &Prizes{
+            shuffle: true,
+            prizes: prizes,
+        })?;
 
         return Ok(Response::new().add_attribute("action","set prizes"));
     }
@@ -372,7 +395,7 @@ pub fn query(_deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 }
 
 pub fn query_get_prizes(deps: Deps) -> StdResult<PrizesQuery> {
-    let prizes = PRIZES.load(deps.storage)?;
+    let prizes = PRIZES.load(deps.storage)?.prizes;
     return Ok(PrizesQuery{prizes});
 }
 

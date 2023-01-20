@@ -34,7 +34,13 @@ pub struct DistributePrize {
 }
 pub const DISTRIBUTE_PRIZES: Item<Vec<DistributePrize>> = Item::new("distribute prizes");
 
-pub const PRIZES: Item<Vec<String>> = Item::new("prizes");
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct Prizes {
+    pub shuffle: bool,
+    pub prizes: Vec<String>,
+}
+pub const PRIZES: Item<Prizes> = Item::new("prizes");
 
 pub const OWNER: Item<Addr> = Item::new("owner");
 
