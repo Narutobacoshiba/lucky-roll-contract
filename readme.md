@@ -106,7 +106,7 @@
        --gas-adjustment 1.4  \
        --gas-prices 0.025ueaura \
        --broadcast-mode=block \
-       --node=https://rpc.euphoria.aura.network/ -y \
+       --node=https://rpc.euphoria.aura.network:443/ -y \
        |yq -r ".logs[0].events[1].attributes[1].value" ) 
 ```
 
@@ -125,11 +125,12 @@
        --gas=auto \
        --gas-adjustment 1.4 \
        --broadcast-mode=block \
-       --node=https://rpc.euphoria.aura.network/ -y \
+       --node=https://rpc.euphoria.aura.network:443/ -y \
        |yq -r '.logs[0].events[0].attributes[0].value' )
 ```
 
 * `Execute`
+example
 ```
     aurad tx wasm execute $LUCKY_ROLL_CONTRACT \
         '{"lucky_number": {}}' \
@@ -142,6 +143,7 @@
 ```
 
 * `Query`
+example
 ```
     aurad query wasm contract-state smart \
         $LUCKY_ROLL_CONTRACT  \
