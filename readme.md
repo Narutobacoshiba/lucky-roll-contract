@@ -113,9 +113,11 @@
 * `Instantiate contract`
 ```
     export NOIS_PROXY=aura19z2hv8l87qwg8nnq6v76efjm2rm78rkdghq4rkxfgqrzv3usw8lq26rmwt
+    export TIME_START="2023-01-21 00:00:00Z"
+    export TIME_END="2023-01-21 23:59:59Z"
     export LUCKY_ROLL_CONTRACT=$(aurad \
        tx wasm instantiate $CODE_ID \
-       '{"nois_proxy": "'"$NOIS_PROXY"'","time_start":"2023-01-21 00:00:00Z","time_end":"2023-01-21 23:59:59Z"}' \
+       '{"nois_proxy": "'"$NOIS_PROXY"'","time_start":"'"$TIME_START"'","time_end":"'"$TIME_END"'"}' \
        --label=lucky-roll \
        --no-admin \
        --from <your-key> \
