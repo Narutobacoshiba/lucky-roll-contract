@@ -16,7 +16,7 @@
 
 # Execute
 
-*`reset`
+`reset`
 ```Rust
     Reset {
         nois_proxy: String,
@@ -27,7 +27,7 @@
 - only allow onwer to execute
 - will reset game
 
-*`set_white_list`
+`set_white_list`
 ```Rust
     SetWhiteList {
         attendees: Vec<String>
@@ -37,7 +37,7 @@
 - only executed in round
 - specific players by wallet address
 
-*`set_prizes`
+`set_prizes`
 ```Rust
     Setprizes {
         prizes: Vec<String>
@@ -47,7 +47,7 @@
 - only executed in round
 - this will make a message to Nois Proxy and will be shuffled randomly using NoisCallback (after execute `set_prizes` command, need to wait 1-2' for **NoisCallback** then you can execute another command like `roll`)
 
-*`roll`
+`roll`
 ```Rust
     Roll {
 
@@ -59,7 +59,7 @@
 - this command will distribute prizes for all attendees base on prizes list and attendee's lucky number
 - if success, it will end a round
 
-*`lucky_number`
+`lucky_number`
 ```Rust
     LuckyNumber {
 
@@ -71,19 +71,19 @@
 - make a message to Nois Proxy and receive NoisCallback as lucky number
 
 # Query
-*`get_prizes`
+`get_prizes`
 ```Rust
     GetPrizes{}
 ```
 - list all prizes
 
-*`get_attendees`
+`get_attendees`
 ```Rust
     GetAttendees{}
 ```
 - list all attendees
 
-*`get_distribute_prizes`
+`get_distribute_prizes`
 ```Rust
     GetDistributePrizes{}
 ```
