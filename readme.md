@@ -1,6 +1,12 @@
 # **Lucky Roll**
 
-# Flow
+Lucky Roll is a lucky game that uses fair random number from [Nois](https://docs.nois.network/) - a Proof of Stake blockchain protocol that allows developers to use secure, unbiased and cost efficient randomness via IBC
+
+The game is hosted on [Aura Network](https://aura.network/)
+
+## Game Flow
+
+### 1. Game Owner:
 * Owner `Instantiate` contract with following parameters
     - `nois_proxy` is nois proxy contract address in our chain
     - `time_start` is time start of game, format "2023-01-19 19:05:00Z" UTC+0
@@ -8,14 +14,31 @@
 * Owner can execute `reset` command to reset game with same parameters as `Instantiate`
 * Owner execute `set_white_list` command to specify who can allowed to playing game
 * Onwer execute `set_prizes` command to set prizes
-* Players execute `lucky_number` command to receive owned lucky number ( maybe will require attendee to send with some new year messages to dev team)
+* The game will be played in rounds, every time the `roll` command is successful, the game will end a round. To play again, use the command `reset`
+
 * In the end, owner execute `roll` command to distribute prizes for players
 
+### 2. Participants
+* Players execute `lucky_number` command to receive owned lucky number (maybe will require attendee to send with some new year messages to dev team)
+example:
+```
+    export LUCKY_ROLL_CONTRACT=aura1r5xw9m0tlwlqg3uhseqq27tzhsn7m5vlc32fen977hswa8f2gy5shfjt43
+    
+    aurad tx wasm execute $LUCKY_ROLL_CONTRACT \
+       '{"lucky_number" :{}}' \
+       --from <your-validator-signing-key> \
+       --chain-id euphoria-2 \
+       --gas-prices 0.025ueaura \
+       --gas=auto \
+       --gas-adjustment 1.4 \
+       --node=https://rpc.euphoria.aura.network:443/ \
+       --broadcast-mode=block \
+       --amount 300ueaura
+```
 
-*The game will be played in rounds, every time the `roll` command is successful, the game will end a round. To play again, use the command `reset`
+The game will allow a period from `time_start` to `time_end` to wait for all players to roll. After this period, the owner can execute command `roll` to distribute the prize
 
-# Execute
-
+# Sample commands
 `reset`
 ```Rust
     Reset {
