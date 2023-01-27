@@ -36,6 +36,14 @@ example:
        --amount 300ueaura
 ```
 
+* You can also query the state of all attendees using:
+```
+aurad query wasm contract-state smart \
+        $LUCKY_ROLL_CONTRACT  \
+        '{"get_attendees": {}}' \
+        --node=https://rpc.euphoria.aura.network:443/
+```
+
 The game will allow a period from `time_start` to `time_end` to wait for all players to roll. After this period, the owner can execute command `roll` to distribute the prize
 
 # Sample commands
