@@ -19,7 +19,7 @@ The game is hosted on [Aura Network](https://aura.network/)
 * In the end, owner execute `roll` command to distribute prizes for players
 
 ### 2. Participants
-* Players execute `lucky_number` command to receive owned lucky number (maybe will require attendee to send with some new year messages to dev team)
+* Players execute `lucky_number` command to receive owned lucky number
 example:
 ```
     export LUCKY_ROLL_CONTRACT=aura1r5xw9m0tlwlqg3uhseqq27tzhsn7m5vlc32fen977hswa8f2gy5shfjt43
